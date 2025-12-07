@@ -1,0 +1,20 @@
+# Spec Changes Log
+Append-only record of updates to specifications. Each entry should reference the affected spec and the decision owner.
+
+## Entry Template
+| date (YYYY-MM-DD) | author | spec/section | change_summary | links |
+| --- | --- | --- | --- | --- |
+| YYYY-MM-DD | Owner | Path or ID | Brief description | References |
+
+## Entries
+| date (YYYY-MM-DD) | author | spec/section | change_summary | links |
+| --- | --- | --- | --- | --- |
+| 2025-12-07 | Atlas | Core spec scaffolding | Seeded project overview, workflow, onboarding, and data/glossary/spec index skeletons per initial directives. | |
+| 2025-12-07 | Atlas | Governance updates | Added enforced rules (no deletion, append-only logging, spec index/devlog/TODO sync, versioning) to workflow, thread survival, onboarding; bumped Spec Index to v2. | |
+| 2025-12-09 | Atlas | Kepler Operating Contract v1 | Added engineering operating contract, codifying priorities, conventions, workflows; registered in Spec Index (v3). | |
+| 2026-02-10 | Atlas | Lumenfall_CardSystem_v1 | Added canon card system covering templates, instances, rarities/tiers, essence, charged cards/locking, exchange rules, collection behavior, pack flow, and ARPG hooks; registered in Spec Index (v4). | |
+| 2026-02-10 | Atlas | Survival Packet Volume I | Added system continuity packet defining Triad roles, authority hierarchy, canon layers, and reconstruction protocol; registered in Spec Index (v5). | |
+| 2026-02-10 | Atlas | Survival Packet Volume II | Added state registry snapshot (project coordinates, canon status, active TODO map, resurrection seed) and registered in Spec Index (v6). | |
+| 2026-02-10 | Atlas | regions_and_classes v2 | Added canon region registry entries (Stormbound Coast, Wraithmarsh, Emberspire, Frostgrave Tundra, Verdantwild, Sunsong Highlands) plus placeholder Metal/Astral regions; updated Spec Index (v7) and Data Backbone. | |
+| 2026-02-10 | Atlas | Spec Index v8 | Embedded full region registry block from regions_and_classes canon to support fast reload and continuity. | |
+| 2026-02-10 | Atlas | Spec Index v5 | Flattened placeholder spec paths to docs/specs root (Card/Packs/ARPG/Region/Sharenbaal/Castle) and updated index paths accordingly. | |
