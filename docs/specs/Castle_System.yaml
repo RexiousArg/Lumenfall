@@ -1,0 +1,19 @@
+system:
+  version: 0
+  status: placeholder
+  description: >
+    Castle System placeholder. Represents the central hub, the badge
+    economy interface, castle packs, narrative convergence, and late-game
+    ARPG interactions.
+sections:
+  objects: placeholder
+  states: placeholder
+  transitions: placeholder
+  loops: placeholder
+  player_rules: placeholder
+  invariants: placeholder
+  interactions: placeholder
+  arpg_hooks: placeholder
+notes: >
+  All content subject to change. The castle serves as a multi-system
+  convergence point; this file defines only the structural foundation.

@@ -1,0 +1,19 @@
+system:
+  version: 0
+  status: placeholder
+  description: >
+    ARPG Combat System placeholder. Establishes structure for enemies,
+    attacks, damage types, scaling formulas, region modifiers, and
+    hazard interactions.
+sections:
+  objects: placeholder
+  states: placeholder
+  transitions: placeholder
+  loops: placeholder
+  player_rules: placeholder
+  invariants: placeholder
+  interactions: placeholder
+  arpg_hooks: placeholder
+notes: >
+  All content subject to change. ARPG subsystem is a major component and
+  will be formalized after foundational systems stabilize.

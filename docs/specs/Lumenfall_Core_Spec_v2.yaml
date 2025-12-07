@@ -1,0 +1,85 @@
+spec_version: 2
+lumenfall_core_spec:
+  description: >
+    Central authoritative specification for Lumenfall project. Parsed by Kepler
+    for forward-compatible architecture, scaling decisions, and mechanic
+    consistency. All systems reference this document as canonical.
+  project:
+    name: Lumenfall
+    pillars:
+      - CCG
+      - ARPG
+      - MMO-lite progression
+      - Philosophical endgame
+  rarities:
+    order:
+      - Common
+      - Uncommon
+      - Rare
+      - Epic
+      - Legendary
+      - Mythic
+      - Secret
+      - Astral
+      - Divine
+    properties:
+      Common: {maxTier: 0, hasEssence: true}
+      Uncommon: {maxTier: 0, hasEssence: true}
+      Rare: {maxTier: 5, hasEssence: true}
+      Epic: {maxTier: 5, hasEssence: true}
+      Legendary: {maxTier: 5, hasEssence: true}
+      Mythic: {maxTier: 5, hasEssence: true}
+      Secret: {maxTier: 5, hasEssence: true}
+      Astral: {maxTier: 8, hasEssence: true}
+      Divine: {maxTier: 5, hasEssence: false}
+  packs:
+    base_sizes:
+      pack: 5
+      box: 10
+    rarity_chances:
+      Common: 0.60
+      Uncommon: 0.25
+      Rare: 0.10
+      Epic: 0.039
+      Legendary: 0.001
+      Mythic: 0.00001
+      Secret: 0.000001
+      Astral: 0.0000001
+      Divine: 0.0000005
+    pity:
+      Epic: 200
+      Legendary: 2000
+      Mythic: 200000
+  instances:
+    fields:
+      - instance_id
+      - card_id
+      - rarity
+      - tier
+      - element
+      - charges
+      - locked
+  elements:
+    list: ["Fire","Ice","Nature","Light","Void","Metal","Arcane","Astral"]
+  essence:
+    conversion_up:
+      Common_to_Rare: 25
+      Rare_to_Epic: 20
+      Epic_to_Legendary: 15
+      Legendary_to_Mythic: 10
+      Mythic_to_Secret: 10
+    upgrade_costs:
+      Rare: "tier * 5"
+      Epic: "tier * 1"
+      Legendary: "tier * 1"
+      Mythic: "tier * 1"
+      Secret: "tier * 1"
+      Astral: "tier * 1"
+    exchange:
+      minTier: 2
+      essenceReward: "tier"
+  sharenbaal:
+    purpose: >
+      Player-personalized codex of world knowledge, behavior signatures,
+      unlocked truths, and meta-narrative structures.
+    acquisition: "Unlocked at player level 5."

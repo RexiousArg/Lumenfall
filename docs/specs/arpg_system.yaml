@@ -1,0 +1,65 @@
+spec: arpg_system
+version: 1
+player_stats:
+  base:
+    max_hp: 10
+    attack: 1
+    move_speed: 1.0
+  death_behavior:
+    on_zero_hp:
+      - "Show game over overlay."
+      - "After short delay, reset player HP and return to home screen."
+enemies:
+  normal:
+    hp: 2
+    damage: 1
+    behavior: "Chase player when within aggro radius."
+  boss:
+    hp: 10
+    damage: 3
+    behavior: "Chase player; spawned every N kills."
+spawning:
+  base_enemy_spawn:
+    mode: "timed_or_wave"
+    parameters:
+      spawn_interval_seconds: 1.5
+  boss_spawn_rule:
+    kills_per_boss: 10
+    on_boss_death:
+      rewards:
+        erun: 1
+currencies:
+  list:
+    - Vel
+    - Erun
+    - Zeth
+    - Velarun
+  base_unit: Vel
+  relationships:
+    Erun:
+      equals_vel: 1000
+    Zeth:
+      equals_erun: 100
+    Velarun:
+      equals_zeth: 100
+  auto_conversion:
+    enabled: true
+    behavior:
+      - "As Vel reaches thresholds, automatically convert to Erun, Zeth, Velarun."
+  rewards:
+    normal_kill:
+      vel: 100
+    boss_kill:
+      erun: 1
+soft_lock_rules:
+  target_level: 15
+  description: "ARPG progression becomes very difficult beyond this level without card-based power."
+  implementation_stub:
+    - "Scale enemy HP/damage sharply after level 15."
+    - "Assume card-based stats are required to progress efficiently."
+combat_controls:
+  movement: "Keyboard or controller (engine-specific)."
+  attack:
+    primary:
+      input: "Spacebar"
+      effect: "Damage all enemies within short radius for base_attack."

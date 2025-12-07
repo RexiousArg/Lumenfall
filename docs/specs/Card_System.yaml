@@ -1,0 +1,19 @@
+system:
+  version: 0
+  status: placeholder
+  description: >
+    Card System placeholder. Structural base for defining templates,
+    instances, rarities, tiers, elements, charges, locking behavior,
+    and essence integration.
+sections:
+  objects: placeholder
+  states: placeholder
+  transitions: placeholder
+  loops: placeholder
+  player_rules: placeholder
+  invariants: placeholder
+  interactions: placeholder
+  arpg_hooks: placeholder
+notes: >
+  All content subject to change. Detailed card system mechanics will be
+  ported in from validated specifications in earlier development threads.

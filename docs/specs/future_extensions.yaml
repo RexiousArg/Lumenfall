@@ -1,0 +1,18 @@
+spec: future_extensions
+version: 1
+planned_systems:
+  - id: pets_and_mounts
+    status: planned
+    description: "Pet companions, mounts, passive creatures, taming, and indexing."
+  - id: dungeons_and_raids
+    status: planned
+    description: "Instanced content, group challenges, scaled rewards."
+  - id: multiplayer_core
+    status: planned
+    description: "Co-op, guilds, trading rules, instanced events."
+  - id: class_tiers
+    status: planned
+    description: "Tiered class evolutions; potential future design."
+  - id: glitch_depths
+    status: planned
+    description: "Endgame space tied to Fracture Above and philosophical systems."
