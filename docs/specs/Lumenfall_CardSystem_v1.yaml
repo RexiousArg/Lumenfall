@@ -1,0 +1,405 @@
+name: Lumenfall_CardSystem_v1
+version: 1
+type: subsystem_spec
+owner: Neotus
+status: canon
+last_updated: 2025-12-07
+
+summary:
+  description: >
+    Defines the mechanical behavior of cards in Lumenfall: templates,
+    instances, rarities, tiers, elements, essence, charged behavior,
+    locking/exchange, and integration points with the ARPG ability/passive
+    system. Cards are progression objects and build components, not TCG
+    combat pieces.
+  scope:
+    - Card templates (static definitions)
+    - Card instances (player-owned state)
+    - Rarity model and tier ranges
+    - Elements and instance assignment
+    - Essence economy and conversions
+    - Charged cards, locking, withering, recharging
+    - Exchange rules and collection behavior
+    - Pack → template → instance flow
+    - High-level ARPG integration hooks (no combat math)
+  non_goals:
+    - No TCG battlefield, turn system, or card-vs-card combat
+    - No detailed ARPG damage formulas (defined in Combat_System spec)
+    - No card crafting system (future spec)
+
+canonical_relationships:
+  supersedes:
+    - any prior draft card/TCG specs
+    - any TODOs implying turn-based card combat
+  depends_on:
+    - Lumenfall_Prime_Handoff_v1.yaml
+    - Lumenfall_Core_Spec_v2.yaml
+  notes:
+    - If a previous spec conflicts with this file on card behavior, this file wins.
+
+# ------------------------------------------------------------
+# 1. CARD TEMPLATES (STATIC DEFINITIONS)
+# ------------------------------------------------------------
+card_templates:
+  storage:
+    registry_file: "docs/data/card_templates.yaml"
+    key_field: "template_id"
+  fields:
+    template_id: "string (unique, stable; e.g., RARE_012 or EPIC_FIRE_SLASH)"
+    name: "string"
+    rarity: "enum[Rarity]"
+    card_type: "enum[attack, spell, support, passive, charged, utility, special]"
+    base_charges: "int_or_null  # null = not a charged card"
+    mechanical_tags: "list[string]  # e.g., ['aoe', 'dot', 'movement', 'summon']"
+    flavor_tags: "list[string]     # e.g., ['storm', 'ancient', 'shardbound']"
+    description: "string  # player-facing rules text / explanation"
+  invariants:
+    - "Templates are immutable; they never change at runtime."
+    - "Templates never store element or tier; those live on instances."
+    - "card_type must be used only for ARPG ability/passive mapping, not TCG logic."
+
+# ------------------------------------------------------------
+# 2. CARD INSTANCES (PLAYER-OWNED STATE)
+# ------------------------------------------------------------
+card_instances:
+  storage:
+    instances_file: "saves/card_instances.json"
+  fields:
+    instance_id: "UUID  # unique per instance"
+    template_id: "string  # foreign key into card_templates"
+    rarity: "enum[Rarity]  # copied from template at creation"
+    tier: "int  # see rarity-tiers mapping"
+    element: "enum[Element] or null  # Rare+ only; null for Common/Uncommon"
+    charges: "int_or_null  # null if card is not charged"
+    locked: "bool"
+  rules:
+    - "Every pack pull creates a new instance."
+    - "Rarity must always match the template's rarity."
+    - "Tier must respect rarity-specific allowed ranges."
+    - "Element must be null for Common/Uncommon, non-null for Rare+."
+    - "Divine instances always have tier=5 and cannot be tier-modified or exchanged."
+    - "Instances are the only objects that can be upgraded, exchanged, locked, or recharged."
+
+# ------------------------------------------------------------
+# 3. RARITIES & TIERS
+# ------------------------------------------------------------
+rarities:
+  list:
+    - Common
+    - Uncommon
+    - Rare
+    - Epic
+    - Legendary
+    - Mythic
+    - Secret
+    - Astral
+    - Divine
+
+  tier_ranges:
+    Common:
+      min_tier: 0
+      max_tier: 0
+    Uncommon:
+      min_tier: 0
+      max_tier: 0
+    Rare:
+      min_tier: 1
+      max_tier: 5
+    Epic:
+      min_tier: 1
+      max_tier: 5
+    Legendary:
+      min_tier: 1
+      max_tier: 5
+    Mythic:
+      min_tier: 1
+      max_tier: 5
+    Secret:
+      min_tier: 1
+      max_tier: 5
+    Astral:
+      min_tier: 1
+      max_tier: 8
+    Divine:
+      min_tier: 5
+      max_tier: 5
+
+  visibility:
+    hidden_until_owned:
+      - Mythic
+      - Secret
+      - Astral
+      - Divine
+
+  notes:
+    - "Pull chances and pity rules are defined in the Pack_System spec."
+    - "This file defines how rarities interact with tiers and instances, not drop rates."
+
+tiers:
+  upgrade_costs:
+    # cost expressed in 'essence of that rarity'
+    Rare: "tier × 5"
+    Epic: "tier × 1"
+    Legendary: "tier × 1"
+    Mythic: "tier × 1"
+    Secret: "tier × 1"
+    Astral: "tier × 1"
+  rules:
+    - "Common and Uncommon: tier = 0, no tier upgrades."
+    - "Rare+ tiers cannot exceed rarity-specific max_tier."
+    - "Divine tier is always 5 and immutable."
+    - "Tier directly influences ARPG scaling via Ability/Passive hooks (see arpg_integration)."
+
+# ------------------------------------------------------------
+# 4. ELEMENT SYSTEM
+# ------------------------------------------------------------
+elements:
+  list:
+    - Fire
+    - Ice
+    - Nature
+    - Light
+    - Void
+    - Metal
+    - Arcane
+    - Astral
+
+  assignment:
+    method: "uniform_random_per_rarity_pool"
+    applies_to: "Rare, Epic, Legendary, Mythic, Secret, Astral, Divine"
+    notes:
+      - "Common and Uncommon instances have element=null."
+      - "Element is chosen at instance creation, not stored on template."
+      - "Element will later interact with classes, regions, and Sharenbaal elemental pages."
+
+# ------------------------------------------------------------
+# 5. ESSENCE ECONOMY
+# ------------------------------------------------------------
+essence:
+  types:
+    - Common
+    - Uncommon
+    - Rare
+    - Epic
+    - Legendary
+    - Mythic
+    - Secret
+  divine_note: "Divine has no essence and cannot be converted."
+
+  acquisition:
+    per_pulls:
+      description: >
+        For each rarity, every 5 pulls of that rarity grants 1 essence of that
+        same rarity.
+      rule: "floor(total_pulls_of_rarity / 5) → essence_of_rarity"
+    exchange:
+      description: >
+        Exchanging a card instance of Tier ≥ 2 grants essence equal to its Tier,
+        in the same rarity as the card.
+      formula: "gained_essence = instance.tier"
+
+  conversion:
+    # upward-only conversion rates
+    upward_rates:
+      Common_to_Rare:   {from: Common,   to: Rare,      cost: 25}
+      Rare_to_Epic:     {from: Rare,     to: Epic,      cost: 20}
+      Epic_to_Legendary:{from: Epic,     to: Legendary, cost: 15}
+      Legendary_to_Mythic:{from: Legendary, to: Mythic, cost: 10}
+      Mythic_to_Secret: {from: Mythic,   to: Secret,    cost: 10}
+    rules:
+      - "Conversion is one-way; there is no down-conversion."
+      - "Divine essence does not exist."
+
+  usage:
+    - "Tier upgrades (Rare+)."
+    - "Recharging locked charged cards (see charged_cards)."
+
+# ------------------------------------------------------------
+# 6. CHARGED CARDS, LOCKING, WITHERING
+# ------------------------------------------------------------
+charged_cards:
+  behavior:
+    common_uncommon:
+      has_charges: false
+      wither_at_zero: true
+      rechargeable: false
+      notes:
+        - "Common and Uncommon effectively behave as non-charged cards mechanically."
+    rare_plus:
+      has_charges: true
+      unlocked_behavior:
+        wither_at_zero: true
+        rechargeable: false
+        notes:
+          - "Unlocked Rare+ cards disappear when charges reach zero."
+      locked_behavior:
+        wither_at_zero: false
+        rechargeable: true
+        notes:
+          - "Locked cards remain in inventory at 0 charges but cannot be used or moved."
+          - "They must be recharged using essence of matching rarity."
+
+  recharge:
+    resource: "essence_of_card_rarity"
+    formula_hint: >
+      Cost scales with (rarity, tier, max_charges). Exact numbers are defined
+      in a future Charged_Cards_Expansion spec. For now, use a linear or
+      quadratic curve that makes recharging powerful cards meaningfully costly.
+
+locking:
+  rules:
+    - "Locked=true prevents withering for Rare+ charged cards at 0 charges."
+    - "Locked instances cannot be moved or exchanged until unlocked."
+    - "Locking marks the card as 'bound' to the player for future systems."
+  interactions:
+    ui:
+      lock_action: "left-click in collection or dedicated 'lock' button."
+      feedback: "visual lock icon + small sound."
+
+# ------------------------------------------------------------
+# 7. EXCHANGE RULES
+# ------------------------------------------------------------
+exchange:
+  eligibility:
+    min_tier: 2
+    excluded_rarities:
+      - Divine
+  behavior:
+    on_exchange:
+      - "Grant essence equal to instance.tier for the card's rarity."
+      - "Remove the card instance from saves/card_instances.json."
+      - "Decrement collection counts accordingly."
+  notes:
+    - "Tier 1 cards cannot be exchanged."
+    - "Divine cards cannot be exchanged under any circumstances."
+
+# ------------------------------------------------------------
+# 8. COLLECTION BEHAVIOR (MECHANICAL)
+# ------------------------------------------------------------
+collection:
+  data_source: "saves/card_instances.json"
+  display_fields:
+    - rarity
+    - tier
+    - element
+    - charges
+    - locked
+  interactions:
+    left_click:
+      - "Toggle lock/unlock if card supports locking."
+    right_click:
+      - "Exchange card if eligible (Tier ≥ 2 and non-Divine)."
+  visibility_rules:
+    undiscovered_behavior:
+      - "Show ??? placeholders for undiscovered cards."
+      - "Secret, Astral, and Divine cards are completely hidden until first owned."
+  ui_notes:
+    - "Visual polish and layout details are defined in UI/UX specs; this file only sets behavior."
+
+# ------------------------------------------------------------
+# 9. PACK ↔ TEMPLATE ↔ INSTANCE FLOW
+# ------------------------------------------------------------
+pack_integration:
+  inputs:
+    - "rarity (determined by Pack_System)"
+    - "template pool for that rarity"
+  process:
+    - "Choose random template from the rarity's pool."
+    - "Create new instance with:"
+  instance_creation:
+    set_fields:
+      rarity: "template.rarity"
+      template_id: "chosen template"
+      tier: "random int within rarity tier_range (min_tier..max_tier)"
+      element: "null for Common/Uncommon; random Element for Rare+"
+      charges: "template.base_charges or null"
+      locked: false
+    post_creation_effects:
+      - "Increment rarity pull counters for essence-per-pulls logic."
+      - "Update lifetime stats/logging (see Pack_System)."
+
+# ------------------------------------------------------------
+# 10. ARPG INTEGRATION HOOKS (NO COMBAT MATH)
+# ------------------------------------------------------------
+arpg_integration:
+  concept:
+    - "Cards are build components for the ARPG, not turn-based combat pieces."
+    - "Instances provide parameters to the ARPG ability/passive system."
+  card_type_mapping:
+    attack:
+      description: "Direct offensive ARPG ability (active skill)."
+      binds_to: "ability_slots"
+    spell:
+      description: "Non-weapon ARPG actions (buffs, debuffs, teleports, etc.)."
+      binds_to: "ability_slots"
+    support:
+      description: "Hybrid abilities with utility or ally effects."
+      binds_to: "ability_slots or modifier_slots"
+    passive:
+      description: "Always-on stat or behavior modifications."
+      binds_to: "passive_slots"
+    charged:
+      description: "Limited-use high-impact abilities."
+      binds_to: "ability_slots or special_slot"
+    utility:
+      description: "Movement, mobility, evasion, or environmental interaction."
+      binds_to: "ability_slots"
+    special:
+      description: "Rare/unique behaviors (e.g., Divine effects); defined case-by-case."
+
+  slots:
+    ability_slots:
+      count: 4
+      notes:
+        - "Primary active skills mapped to input keys/buttons."
+        - "Each ability card mapped here reads its tier, rarity, and element for scaling."
+    passive_slots:
+      count: 3
+      notes:
+        - "Always-on effects (stat boosts, conditional bonuses)."
+    modifier_slots:
+      count: 3
+      notes:
+        - "Mutate existing abilities (e.g., add AoE, convert element, add DoT)."
+    special_slot:
+      count: 1
+      notes:
+        - "Reserved for unique or Divine-level effects where needed."
+
+  scaling_hooks:
+    tier_effect:
+      description: "Tier multiplies base effect of abilities/passives."
+      hint: "Use monotonic scaling; exact math defined in Combat_System spec."
+    rarity_effect:
+      description: "Higher rarities may unlock additional behavior, not just numbers."
+      examples:
+        - "Extra projectiles at Legendary+."
+        - "Added secondary effect at Mythic+."
+        - "Unique interaction with Sharenbaal or Guide at Secret/Astral/Divine."
+    element_effect:
+      description: "Element influences damage type, resist checks, and class synergies."
+      note: "Full details live in Elements_and_Classes spec."
+
+  runtime_behavior:
+    on_loadout_apply:
+      - "Read equipped cards from saves/equips.json (or future loadout system)."
+      - "Build ability/passive/modifier sets using instances, not templates."
+      - "Pass instance parameters into ARPG ability system as configuration."
+    on_instance_change:
+      - "If a relevant card changes tier, element, or charges, update ARPG configuration next time loadout is applied."
+      - "In-combat dynamic changes are out of scope for v1."
+
+# ------------------------------------------------------------
+# 11. DATA & VERSIONING
+# ------------------------------------------------------------
+data_files:
+  templates_registry: "docs/data/card_templates.yaml"
+  instances_file: "saves/card_instances.json"
+  equips_file: "saves/equips.json"
+
+versioning:
+  bump_rules:
+    - "Increment minor version when adding new fields that are backward compatible."
+    - "Increment major version when changing semantics of existing fields or behaviors."
+  migration_notes:
+    - "Any future v2+ must define a clear migration path from v1 instances and essence tallies."

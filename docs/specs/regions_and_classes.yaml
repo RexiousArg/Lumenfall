@@ -1,5 +1,5 @@
 spec: regions_and_classes
-version: 1
+version: 2
 regions:
   - id: kalveth_esthrel
     name: "Kalveth Esthrel"
@@ -83,3 +83,121 @@ castle_packs:
           Astral: 10
     notes:
       - "Exact numbers tunable; logic preserved."
+
+# Expanded region registry (canon alignment)
+region_registry:
+  Stormbound_Coast:
+    status: canon
+    primary_element: Lightning
+    class_cluster: Stormbound
+    biome: Coastal Tempestlands
+    esthrel: TBD
+    danger_profile: partial
+    sharenbaal_hooks:
+      - region_reveal_unlock
+      - stormbound_page_bias
+    states:
+      discovered: false
+      blighted: false
+
+  Wraithmarsh:
+    status: canon
+    primary_element: Void
+    class_cluster: Wraithborn
+    biome: Marsh / Umbral Wetlands
+    esthrel: TBD
+    danger_profile: high
+    sharenbaal_hooks:
+      - void_page_bias
+      - sharenbaal_dim_modifier
+    states:
+      discovered: false
+      blighted: false
+
+  Emberspire:
+    status: canon
+    primary_element: Fire
+    class_cluster: Emberforged
+    biome: Volcanic / Ashlands
+    esthrel: TBD
+    danger_profile: medium
+    sharenbaal_hooks:
+      - fire_page_bias
+    states:
+      discovered: false
+      blighted: false
+
+  Frostgrave_Tundra:
+    status: canon
+    primary_element: Ice
+    class_cluster: Frostbound
+    biome: Tundra / Frozen Expanse
+    esthrel: TBD
+    danger_profile: low
+    sharenbaal_hooks:
+      - ice_page_bias
+    states:
+      discovered: false
+      blighted: false
+
+  Verdantwild:
+    status: canon
+    primary_element: Nature
+    class_cluster: Wildheart
+    biome: Forest / Lifebloom
+    esthrel: TBD
+    danger_profile: variable
+    sharenbaal_hooks:
+      - nature_page_bias
+    states:
+      discovered: false
+      blighted: false
+
+  Sunsong_Highlands:
+    status: canon
+    primary_element: Light
+    class_cluster: Sunweavers
+    biome: Highlands / Sacred Vales
+    esthrel: TBD
+    danger_profile: medium
+    sharenbaal_hooks:
+      - light_page_bias
+    states:
+      discovered: false
+      blighted: false
+
+  Metal_Region:
+    status: placeholder
+    primary_element: Metal
+    name: TBD
+    class_cluster: TBD
+    biome: TBD
+    esthrel: TBD
+    danger_profile: TBD
+    sharenbaal_hooks:
+      - metal_page_placeholder
+    states:
+      discovered: false
+      blighted: false
+      attuned: false
+    notes: >
+      Placeholder region for structural completeness.
+      All lore and mechanics TBD.
+
+  Astral_Region:
+    status: placeholder
+    primary_element: Astral
+    name: TBD
+    class_cluster: TBD
+    biome: TBD
+    esthrel: TBD
+    danger_profile: TBD
+    sharenbaal_hooks:
+      - astral_page_placeholder
+    states:
+      discovered: false
+      blighted: false
+      attuned: false
+    notes: >
+      Placeholder region linked to the Astral element.
+      Canon pending.
