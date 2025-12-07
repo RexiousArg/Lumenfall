@@ -1,0 +1,52 @@
+spec: sharenbaal
+version: 1
+acquisition:
+  level_requirement: 5
+  delivery:
+    mode: "Silently appears in inventory; no quest text."
+book_behavior:
+  equip_visual: "Book hovers above hands when equipped."
+  open_action:
+    effect: "Zoom camera into book; transition to cathedral space."
+chapters:
+  - id: elements
+    name: "On the Eight Currents"
+    unlocked_by:
+      - "Discovering at least one card or enemy of each element."
+  - id: regions
+    name: "On Lands and Esthrels"
+    unlocked_by:
+      - "Visiting each active region at least once."
+  - id: classes
+    name: "On Paths and Callings"
+    unlocked_by:
+      - "Choosing a class."
+  - id: history
+    name: "On the Woven Past"
+    unlocked_by:
+      - "Story progression milestones (TBD)."
+  - id: prisms
+    name: "On Prisms and Refractions"
+    unlocked_by:
+      - "Always present but content heavily redacted until Prism obtained."
+  - id: behavior_paths
+    name: "On Ways Walked"
+    unlocked_by:
+      - "Sharenbaal internal behavior analysis; no explicit player trigger."
+behavior_paths:
+  count: 8
+  description: "Eight broad behavioral arcs determined from player actions."
+  implementation_stub:
+    inputs:
+      - spending_patterns
+      - risk_taking
+      - ARPG_vs_CCG_focus
+      - social_vs_solo_preference_future
+    output:
+      - "Assign 1 of 8 named paths to the player for use in UI and Guide dialogue."
+page_rendering:
+  rule: "Each chapter page changes cathedral environment to match topic."
+  examples:
+    elements: "Celestial dome with eight colored currents."
+    history: "Massive library with countless shelves."
+    prisms: "Hall of mirrors with shattered, unreadable inscriptions until unlocked."

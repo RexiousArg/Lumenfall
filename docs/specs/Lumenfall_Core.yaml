@@ -1,0 +1,23 @@
+version: 3
+project: Lumenfall
+description: >
+  Master index for Lumenfall design specifications. YAML files define mechanical
+  rules and systems. Markdown files provide narrative, lore, and UX intent.
+files:
+  - core_systems.yaml
+  - card_system.yaml
+  - rarity_and_tiers.yaml
+  - essence_system.yaml
+  - charged_cards.yaml
+  - arpg_system.yaml
+  - regions_and_classes.yaml
+  - sharenbaal.yaml
+  - ui_and_ux.yaml
+  - future_extensions.yaml
+  - lore_core.md
+  - lore_regions_and_classes.md
+  - lore_sharenbaal.md
+  - lore_prism_and_guide.md
+notes:
+  - "YAML = source of truth for mechanics."
+  - "Markdown = narrative/contextual reference."
