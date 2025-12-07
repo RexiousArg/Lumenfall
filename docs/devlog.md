@@ -32,6 +32,4 @@ Entries capture meaningful milestones/decisions for continuity between threads.
 - Added Sharenbaal technical spec (`docs/sharenbaal_spec.md`) covering unlock rules, behavior tracking, paths, and save structure scaffold.
 - Copied full spec suite into `docs/specs/` (Lumenfall_Core index + per-system YAMLs and lore markdowns) for long-term reference.
 - Added Sharenbaal integration guide `docs/specs/README_sharenbaal.md` (mechanics/lore pointers, integration notes); awaiting `Lumenfall_Sharenbaal_Mechanics_v1.yaml` and `Sharenbaal_Lore_v1.md` placements when provided.
-
-## 2025-12-07
 - Repository access confirmed via PAT: configured `origin` to https://github.com/RexiousArg/Lumenfall, fetched `main`, and established local tracking for ongoing syncs.
