@@ -1,0 +1,19 @@
+system:
+  version: 0
+  status: placeholder
+  description: >
+    Pack System placeholder. Provides baseline categories for rarity
+    distribution, pity mechanics, multi-pack logic, and region/class
+    weighting rules.
+sections:
+  objects: placeholder
+  states: placeholder
+  transitions: placeholder
+  loops: placeholder
+  player_rules: placeholder
+  invariants: placeholder
+  interactions: placeholder
+  arpg_hooks: placeholder
+notes: >
+  All content subject to change. Pack system will later integrate with
+  Castle, badges, and card economic loops.

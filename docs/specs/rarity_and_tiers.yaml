@@ -1,0 +1,103 @@
+spec: rarity_and_tiers
+version: 1
+rarity_order:
+  - Common
+  - Uncommon
+  - Rare
+  - Epic
+  - Legendary
+  - Mythic
+  - Secret
+  - Astral
+  - Divine
+rarities:
+  Common:
+    chance: 0.60
+    pool_size: 150
+    visible_in_index: true
+    show_unknown_slots: true
+    max_tier: 0
+    has_essence: true
+  Uncommon:
+    chance: 0.25
+    pool_size: 100
+    visible_in_index: true
+    show_unknown_slots: true
+    max_tier: 0
+    has_essence: true
+  Rare:
+    chance: 0.10
+    pool_size: 60
+    visible_in_index: true
+    show_unknown_slots: true
+    max_tier: 5
+    has_essence: true
+  Epic:
+    chance: 0.039
+    pool_size: 30
+    visible_in_index: true
+    show_unknown_slots: true
+    max_tier: 5
+    has_essence: true
+  Legendary:
+    chance: 0.001
+    pool_size: 10
+    visible_in_index: true
+    show_unknown_slots: true
+    max_tier: 5
+    has_essence: true
+  Mythic:
+    chance: 0.00001
+    pool_size: 5
+    visible_in_index: true
+    show_unknown_slots: true
+    max_tier: 5
+    has_essence: true
+  Secret:
+    chance: 0.000001
+    pool_size: 3
+    visible_in_index: true
+    show_unknown_slots: false
+    max_tier: 5
+    has_essence: true
+  Astral:
+    chance: 0.0000001
+    pool_size: 2
+    visible_in_index: false
+    show_unknown_slots: false
+    max_tier: 8
+    has_essence: true
+  Divine:
+    chance: 0.0000005
+    pool_size: 1
+    visible_in_index: false
+    show_unknown_slots: false
+    max_tier: 5
+    has_essence: false
+    notes:
+      - "Currently only Aevum's Prism exists in this rarity."
+pity:
+  enabled_for:
+    - Epic
+    - Legendary
+    - Mythic
+  thresholds:
+    Epic: 200
+    Legendary: 2000
+    Mythic: 200000
+  applies_to_secret: false
+  applies_to_astral: false
+  applies_to_divine: false
+badges:
+  per_rarity:
+    star:
+      id: star
+      unlock_condition: "All unique cards of a rarity owned (tiers ignored)."
+    crown:
+      id: crown
+      unlock_condition: "All unique cards and all tiers of a rarity maxed."
+  completion_visuals:
+    star:
+      type: "cosmetic"
+    crown:
+      type: "cosmetic"

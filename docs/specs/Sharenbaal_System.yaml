@@ -1,0 +1,19 @@
+system:
+  version: 0
+  status: placeholder
+  description: >
+    Sharenbaal System placeholder. Holds structural categories for future
+    definitions of pages, chapters, domain transitions, discovery rules,
+    element gating, hazard locks, and narrative integration.
+sections:
+  objects: placeholder
+  states: placeholder
+  transitions: placeholder
+  loops: placeholder
+  player_rules: placeholder
+  invariants: placeholder
+  interactions: placeholder
+  arpg_hooks: placeholder
+notes: >
+  All content subject to change. This scaffolding exists solely to allow
+  indexing, repo loading, and staged expansion.

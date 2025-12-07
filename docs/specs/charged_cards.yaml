@@ -1,0 +1,61 @@
+spec: charged_cards
+version: 1
+definitions:
+  charged_card:
+    description: "Any card with a finite-use counter (charges)."
+    charges_field: "charges"
+    zero_behavior_depends_on_rarity: true
+rules_by_rarity:
+  Common:
+    rechargeable: false
+    wither_on_zero: true
+    lock_prevents_wither: false
+  Uncommon:
+    rechargeable: false
+    wither_on_zero: true
+    lock_prevents_wither: false
+  Rare:
+    rechargeable: true
+    wither_on_zero_if_unlocked: true
+    wither_on_zero_if_locked: false
+  Epic:
+    rechargeable: true
+    wither_on_zero_if_unlocked: true
+    wither_on_zero_if_locked: false
+  Legendary:
+    rechargeable: true
+    wither_on_zero_if_unlocked: true
+    wither_on_zero_if_locked: false
+  Mythic:
+    rechargeable: true
+    wither_on_zero_if_unlocked: true
+    wither_on_zero_if_locked: false
+  Secret:
+    rechargeable: true
+    wither_on_zero_if_unlocked: false
+    wither_on_zero_if_locked: false
+  Astral:
+    rechargeable: true
+    wither_on_zero_if_unlocked: false
+    wither_on_zero_if_locked: false
+  Divine:
+    rechargeable: true
+    wither_on_zero_if_unlocked: false
+    wither_on_zero_if_locked: false
+lock_behavior:
+  description: "Locked cards are slot-bound and may change wither behavior."
+  effects:
+    - "Locked card cannot be moved or traded."
+    - "For Rare+, locked card does not wither at 0 charges."
+recharge:
+  generic_rules:
+    cost_per_charge: "1 essence of card rarity (unless overridden)."
+    max_charges: "Per-card-type defined; not globally specified here."
+  special_cases:
+    - id: aevums_prism
+      rarity: Divine
+      uses_mythic_essence: true
+      cost_per_charge: 5
+      max_charges: 5
+      notes:
+        - "Full behavior defined in lore_prism_and_guide.md and future mechanical spec."

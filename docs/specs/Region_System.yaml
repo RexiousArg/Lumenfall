@@ -1,0 +1,19 @@
+system:
+  version: 0
+  status: placeholder
+  description: >
+    Region System placeholder. Provides structural fields for future
+    region mechanics, identities, hazards, Esthrel interactions, and
+    ARPG environmental hooks.
+sections:
+  objects: placeholder
+  states: placeholder
+  transitions: placeholder
+  loops: placeholder
+  player_rules: placeholder
+  invariants: placeholder
+  interactions: placeholder
+  arpg_hooks: placeholder
+notes: >
+  All content subject to change. This file serves only as the initial
+  scaffold for region mechanics until full formalization.
