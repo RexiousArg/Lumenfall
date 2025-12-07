@@ -1,0 +1,85 @@
+spec: regions_and_classes
+version: 1
+regions:
+  - id: kalveth_esthrel
+    name: "Kalveth Esthrel"
+    role: "Storm-aligned frontier; home of Stormbound."
+    status: active
+  - id: veluns_reach
+    name: "Velun's Reach"
+    role: "Sun-touched highlands; home of Lightrisen."
+    status: active
+  - id: wraithmarsh
+    name: "Wraithmarsh"
+    role: "Shadowed wetlands; home of Shadowrune."
+    status: active
+  - id: region_4
+    name: "TBD"
+    role: "Planned esthrel region."
+    status: planned
+  - id: region_5
+    name: "TBD"
+    role: "Planned esthrel region."
+    status: planned
+  - id: region_6
+    name: "TBD"
+    role: "Planned esthrel region."
+    status: planned
+  - id: region_7
+    name: "TBD"
+    role: "Planned esthrel region."
+    status: planned
+  - id: fracture_above
+    name: "Fracture Above"
+    role: "Endgame-only, sky fracture; ties to Astral rarity."
+    status: planned
+classes:
+  - id: stormbound
+    name: "Stormbound"
+    home_region: kalveth_esthrel
+    primary_elements:
+      - Fire
+      - Arcane
+    description: "High-tempo, storm/sky flavored class."
+  - id: lightrisen
+    name: "Lightrisen"
+    home_region: veluns_reach
+    primary_elements:
+      - Light
+      - Nature
+    description: "Radiant, support/offense hybrid class."
+  - id: shadowrune
+    name: "Shadowrune"
+    home_region: wraithmarsh
+    primary_elements:
+      - Void
+      - Metal
+    description: "Debuff-oriented, control and corruption."
+class_element_synergy:
+  rule: "Cards matching a class' primary elements receive bonus effectiveness."
+  implementation_stub:
+    - "Future: define numeric bonuses per matching element."
+castle_packs:
+  id: emperor_castle_pack
+  access:
+    required_location: "Central castle or late-game hub."
+    cost_type: "badge"
+    behavior:
+      star_badge:
+        cards_per_open_by_rarity:
+          Common: 1
+          Uncommon: 1
+          Rare: 2
+          Epic: 3
+          Legendary: 4
+          Mythic: 5
+      crown_badge:
+        packs_per_open_by_rarity:
+          Rare: 1
+          Epic: 1
+          Legendary: 1
+          Mythic: 2
+          Secret: 5
+          Astral: 10
+    notes:
+      - "Exact numbers tunable; logic preserved."
