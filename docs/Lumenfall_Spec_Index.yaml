@@ -1,0 +1,28 @@
+spec_index:
+  version: 3
+  description: Master index of all mechanical and lore specifications in Lumenfall.
+  specs:
+    - id: workflow_pipeline
+      path: docs/Lumenfall_Workflow_Pipeline.md
+      version: 2
+      status: active
+      notes: Reflects latest governance rules for spec, devlog, and TODO synchronization.
+    - id: thread_survival_protocol
+      path: docs/Lumenfall_Thread_Survival_Protocol.md
+      version: 2
+      status: active
+      notes: Updated continuity steps and reload checklist.
+    - id: onboarding_guide
+      path: docs/Lumenfall_Onboarding.md
+      version: 2
+      status: active
+      notes: Points newcomers to governance rules and recovery materials.
+    - id: kepler_ruleset
+      path: docs/specs/Kepler_Ruleset.yaml
+      version: 1
+      status: active
+      notes: Engineering operating contract outlining priorities, conventions, and workflows for Kepler.
+  conventions:
+    - mechanics: YAML
+    - lore: Markdown
+    - versioning: increment on new canonical changes

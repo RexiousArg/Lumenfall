@@ -1,0 +1,49 @@
+meta:
+  title: Lumenfall Data Backbone
+  purpose: Defines canonical data artifacts and their relationships for the ARPG/TCG hybrid.
+  maintained_by: Kepler
+  last_updated: null
+  notes: Align schema changes with `docs/specs/Spec_Changes.log` and surface impacts in the Devlog.
+
+layers:
+  - name: player_profile
+    description: Core player identity, progression, and social links.
+    owner: Kepler
+    status: draft
+    schemas: []
+  - name: card_catalog
+    description: Canonical list of cards, stats, rarity, and upgrade paths.
+    owner: Neotus
+    status: draft
+    schemas: []
+  - name: combat_state
+    description: Runtime combat state, turn order, RNG seeds, and log history.
+    owner: Kepler
+    status: draft
+    schemas: []
+  - name: economy
+    description: Currencies, sinks/sources, stores, and monetization rules.
+    owner: Neotus
+    status: draft
+    schemas: []
+  - name: telemetry
+    description: Events for analytics, balance, and live-ops monitoring.
+    owner: Kepler
+    status: draft
+    schemas: []
+
+sync_rules:
+  - ensure_devlog_reference: true
+  - update_spec_index_on_change: true
+  - glossary_terms_required: true
+
+change_log:
+  - note: Append entries here and in `docs/specs/Spec_Changes.log` when schemas change.
+
+data_backbone:
+  rarities: []
+  elements: []
+  classes: []
+  regions: []
+  currencies: []
+  constants: []

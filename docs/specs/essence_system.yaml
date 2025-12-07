@@ -1,0 +1,77 @@
+spec: essence_system
+version: 1
+essence_generation:
+  per_cards_pulled:
+    Common: 5
+    Uncommon: 5
+    Rare: 5
+    Epic: 5
+    Legendary: 5
+    Mythic: 5
+    Secret: 2
+    Astral: 2
+    Divine: null
+  notes:
+    - "Divine cards do not generate essence directly."
+    - "Counts are per rarity; total_cards_pulled[r] // per_cards_pulled[r] -> essence."
+essence_types:
+  - Common
+  - Uncommon
+  - Rare
+  - Epic
+  - Legendary
+  - Mythic
+  - Secret
+conversions:
+  up_chain:
+    - from: Common
+      to: Rare
+      cards_required: 25
+    - from: Rare
+      to: Epic
+      cards_required: 20
+    - from: Epic
+      to: Legendary
+      cards_required: 15
+    - from: Legendary
+      to: Mythic
+      cards_required: 10
+    - from: Mythic
+      to: Secret
+      cards_required: 10
+upgrade_costs:
+  formula:
+    Rare: "tier * 5"
+    Epic: "tier * 1"
+    Legendary: "tier * 1"
+    Mythic: "tier * 1"
+    Secret: "tier * 1"
+    Astral: "tier * 1"
+  notes:
+    - "Cost is in essence of the card's own rarity."
+tier_upgrade_rules:
+  min_tier: 1
+  max_tier_by_rarity:
+    Rare: 5
+    Epic: 5
+    Legendary: 5
+    Mythic: 5
+    Secret: 5
+    Astral: 8
+  allow_tier_up:
+    Common: false
+    Uncommon: false
+    Rare: true
+    Epic: true
+    Legendary: true
+    Mythic: true
+    Secret: true
+    Astral: true
+exchange_system:
+  min_tier: 2
+  essence_reward_formula: "tier"
+  behavior:
+    on_exchange:
+      - "Remove card instance."
+      - "Decrease collection count for that card_id."
+      - "Award essence equal to tier in that card's rarity."

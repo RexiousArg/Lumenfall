@@ -1,0 +1,38 @@
+spec: core_systems
+version: 1
+project:
+  name: Lumenfall
+  pillars:
+    - CCG
+    - ARPG
+    - MMO-lite progression
+    - Philosophical endgame
+modes:
+  ccg:
+    id: ccg
+    description: "Card collection, packs/boxes, rarity progression."
+  arpg:
+    id: arpg
+    description: "Top-down 2D combat, currencies, enemies/bosses, exploration."
+  philosophy:
+    id: philosophy
+    description: "Late/endgame reflective systems: Sharenbaal, Guide, Blight."
+progression_axes:
+  - id: account_level
+    source: "Global XP from all activities."
+  - id: arpg_level
+    source: "Combat XP; soft-locked around level 15 without card power."
+  - id: collection_depth
+    source: "Unique cards owned, rarity completion, tiers, badges."
+  - id: enlightenment
+    source: "Hidden; tied to Blight, Guide, and Sharenbaal usage."
+links:
+  ccg_to_arpg:
+    - "Equipped cards modify ARPG stats."
+    - "Badges and completion unlock cosmetic auras and rare pack access."
+  arpg_to_ccg:
+    - "Arena rewards currencies used for packs/boxes."
+  arpg_to_philosophy:
+    - "Blight, death patterns, and choices unlock Sharenbaal chapters."
+  ccg_to_philosophy:
+    - "High-rarity ownership and Prism usage affect Guide responses."

@@ -1,0 +1,15 @@
+meta:
+  title: Lumenfall Shared Glossary
+  purpose: Unified terminology across design, engineering, and lore.
+  maintained_by: Atlas
+  last_updated: null
+  notes: Add new terms whenever they appear in specs or logs; keep definitions concise.
+
+glossary:
+  rarities: []
+  elements: []
+  currencies: []
+  classes: []
+  regions: []
+  sharenbaal_terms: []
+  general_terms: []
