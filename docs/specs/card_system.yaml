@@ -1,0 +1,67 @@
+spec: card_system
+version: 1
+card_id_format:
+  pattern: "<Rarity>_<NNN>"
+  notes:
+    - "Rarity capitalized (Common, Rare, Mythic, etc.)."
+    - "NNN is zero-padded integer starting at 001."
+card_instance_model:
+  fields:
+    instance_id: "Unique identifier (UUID4 or equivalent)."
+    card_id: "Static card definition id."
+    rarity: "One of rarity_and_tiers.rarity_order."
+    tier: "0 for Common/Uncommon; 1..max_tier otherwise."
+    element: "One of elements.list (card-aligned element)."
+    charges: "Null for non-charged; integer >= 0 for charged cards."
+    locked: "Boolean; when true, card is slot-bound and may not wither (Rare+)."
+card_types:
+  - id: passive
+    description: "Global/stat modifiers that are not tied to equipment."
+  - id: gear
+    description: "Weapon/armor/shield/etc. cards that attach to equipment slots."
+  - id: charged
+    description: "Cards with finite-use effects (consumes charges)."
+  - id: prism
+    description: "Special-case: Aevum's Prism (Divine mechanics)."
+elements:
+  list:
+    - Fire
+    - Ice
+    - Nature
+    - Light
+    - Void
+    - Metal
+    - Arcane
+    - Astral
+  assignment:
+    mode: "random_on_pull"
+    per_instance: true
+    notes:
+      - "Every card instance receives exactly one element at pull time."
+      - "Element is used for class synergy and future mechanics."
+equip_slots:
+  max_base_slots: 3
+  allowed_rarities:
+    - Common
+    - Uncommon
+    - Rare
+    - Epic
+    - Legendary
+    - Mythic
+  effects_stub:
+    common:
+      max_hp_bonus: 1
+    uncommon:
+      attack_bonus: 1
+    rare:
+      max_hp_bonus: 1
+      attack_bonus: 1
+    epic:
+      max_hp_bonus: 3
+      attack_bonus: 3
+    legendary:
+      max_hp_bonus: 5
+      attack_bonus: 5
+    mythic:
+      max_hp_bonus: 10
+      attack_bonus: 10

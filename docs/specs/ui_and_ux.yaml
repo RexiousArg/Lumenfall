@@ -1,0 +1,54 @@
+spec: ui_and_ux
+version: 1
+screens:
+  main_menu:
+    id: main_menu
+    includes:
+      - "Play (launch ARPG/arena)."
+      - "Packs."
+      - "Collection."
+      - "Settings."
+  packs:
+    id: packs_screen
+    behavior:
+      last_pack_displayed: true
+      scrollable_history: true
+      pack_buttons:
+        - id: open_pack
+          cost: {Vel: 250}
+        - id: open_box
+          cost: {Erun: 1}
+      rarity_visuals: "Color-coded backgrounds or frames."
+  arena:
+    id: arena_screen
+    behavior:
+      shows_currency_bar: true
+      shows_hp_bar: true
+      shares_equip_bar_with_packs: true
+  collection:
+    id: collection_screen
+    behavior:
+      grid_layout: true
+      sort_modes:
+        - rarest_first
+        - common_first
+      secret_visibility:
+        secret_shown_as_unknown: true
+        astral_hidden_until_owned: true
+        divine_hidden_until_owned: true
+      completion_display:
+        show_percent_only_if_owned_any: true
+equip_bar:
+  visible_on_screens:
+    - packs_screen
+    - arena_screen
+  slots: 3
+  interaction:
+    left_click: "Open selection modal for equippable cards."
+    right_click: "Clear slot if occupied."
+sharenbaal_ui:
+  opening:
+    trigger: "Use/equip action on Sharenbaal item."
+    transition: "Zoom into book then fade to cathedral view."
+  navigation:
+    method: "Page turns; each page = chapter/environment."
