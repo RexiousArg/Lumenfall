@@ -18,3 +18,4 @@ Append-only record of updates to specifications. Each entry should reference the
 | 2026-02-10 | Atlas | regions_and_classes v2 | Added canon region registry entries (Stormbound Coast, Wraithmarsh, Emberspire, Frostgrave Tundra, Verdantwild, Sunsong Highlands) plus placeholder Metal/Astral regions; updated Spec Index (v7) and Data Backbone. | |
 | 2026-02-10 | Atlas | Spec Index v8 | Embedded full region registry block from regions_and_classes canon to support fast reload and continuity. | |
 | 2026-02-10 | Atlas | Spec Index v5 | Flattened placeholder spec paths to docs/specs root (Card/Packs/ARPG/Region/Sharenbaal/Castle) and updated index paths accordingly. | |
+| 2026-02-10 | Atlas | Prototype Completion Plan v1 | Added active directive defining prototype scope, required systems, exclusions, goals, and completion criteria; registered in Spec Index (v6). | |

@@ -1,5 +1,5 @@
 spec_index:
-  version: 5
+  version: 6
   description: >
     Central reference map for all project specifications.
     This index lists every governance document, subsystem spec,
@@ -30,6 +30,13 @@ specs:
     name: "Kepler Ruleset"
     path: docs/specs/Kepler_Ruleset.yaml
     version: 1
+    status: active
+
+  - id: prototype_completion_plan
+    name: "Prototype Completion Plan"
+    path: docs/Lumenfall_Prototype_Completion_Plan.md
+    version: 1
+    status: active
 
 
   # -------------------------------------------------------
