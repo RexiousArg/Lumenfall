@@ -1,0 +1,308 @@
+# Lumenfall Sharenbaal Core Spec
+# File: docs/specs/sharenbaal_core.yaml
+# Version: v1.0
+# Scope: Mechanical structure + indices only.
+# Lore/interpretation lives in: sharenbaal_lore.md, sharenbaal_reflection.md
+
+meta:
+  id: lumenfall_sharenbaal
+  version: 1.0
+  title: "The Sharenbaal of Lumenfall"
+  description: >
+    The Sharenbaal is the in‑world codex of Lumenfall. It tracks known regions,
+    elements, tone paths, and key metaphysical anchors (Guide, Glitch, Prism),
+    and exposes them as structured data for future systems. This file is
+    intentionally lean on flavor; it exists so mechanics can reference
+    consistent identifiers.
+  authors:
+    - Nullirae
+    - Neotus
+  status: canonical_foundation
+  notes:
+    - "Gameplay systems MUST treat these ids as stable."
+    - "New content may extend these structures but should not rename existing keys."
+
+chapters:
+  - id: overview
+    order: 0
+    label: "Overview & Purpose"
+  - id: regions
+    order: 1
+    label: "The Eight Regions"
+  - id: classes
+    order: 2
+    label: "Class Lineages"
+  - id: elements
+    order: 3
+    label: "Elemental Weave"
+  - id: tone_paths
+    order: 4
+    label: "Paths of the Sharenbaal"
+  - id: world_events
+    order: 5
+    label: "World Fractures & Blight"
+  - id: prism
+    order: 6
+    label: "The Divine Prism Index"
+  - id: guide
+    order: 7
+    label: "The One Called Guide"
+  - id: catalog_rules
+    order: 8
+    label: "Catalog & Unlock Rules"
+
+regions:
+  kalveth_esthrel:
+    name: "Kalveth Esthrel"
+    short_name: "Kalveth"
+    archetype: "Stormbound frontier"
+    primary_biome: "cliffside_highlands"
+    dominant_elements: ["Storm", "Metal", "Void"]
+    recommended_class: "stormbound"
+    level_band:
+      min: 1
+      max: 30
+    is_endgame: false
+
+  veluns_reach:
+    name: "Velun's Reach"
+    short_name: "Velun"
+    archetype: "Solar citadel"
+    primary_biome: "sunlit_plateaus"
+    dominant_elements: ["Light", "Fire", "Arcane"]
+    recommended_class: "lightrisen"
+    level_band:
+      min: 10
+      max: 40
+    is_endgame: false
+
+  wraithmarsh:
+    name: "Wraithmarsh"
+    short_name: "Wraithmarsh"
+    archetype: "Haunted fen"
+    primary_biome: "marshland"
+    dominant_elements: ["Void", "Nature", "Ice"]
+    recommended_class: "shadowrune"
+    level_band:
+      min: 15
+      max: 45
+    is_endgame: false
+
+  emberfall_range:
+    name: "Emberfall Range"
+    short_name: "Emberfall"
+    archetype: "Volcanic forgefront"
+    primary_biome: "volcanic_mountains"
+    dominant_elements: ["Fire", "Metal", "Nature"]
+    recommended_class: "forgeheart"
+    level_band:
+      min: 20
+      max: 50
+    is_endgame: false
+
+  sylvenveil_expanse:
+    name: "Sylvenveil Expanse"
+    short_name: "Sylvenveil"
+    archetype: "Living forest"
+    primary_biome: "ancient_forest"
+    dominant_elements: ["Nature", "Arcane", "Light"]
+    recommended_class: "greenward"
+    level_band:
+      min: 5
+      max: 35
+    is_endgame: false
+
+  frostspire_meridian:
+    name: "Frostspire Meridian"
+    short_name: "Frostspire"
+    archetype: "Polar convergence"
+    primary_biome: "glacial_peaks"
+    dominant_elements: ["Ice", "Arcane", "Storm"]
+    recommended_class: "frostwaken"
+    level_band:
+      min: 25
+      max: 55
+    is_endgame: false
+
+  gloamscale_deeps:
+    name: "Gloamscale Deeps"
+    short_name: "Gloamscale"
+    archetype: "Subterranean labyrinth"
+    primary_biome: "underground_caverns"
+    dominant_elements: ["Void", "Metal", "Astral"]
+    recommended_class: "gloambound"
+    level_band:
+      min: 35
+      max: 60
+    is_endgame: false
+
+  astral_fracture:
+    name: "Astral Fracture"
+    short_name: "Astral Fracture"
+    archetype: "Sky‑borne rift"
+    primary_biome: "void_rift"
+    dominant_elements: ["Astral", "Arcane", "Light"]
+    recommended_class: "starcaller"
+    level_band:
+      min: 60
+      max: 100
+    is_endgame: true
+
+classes:
+  stormbound:
+    name: "Stormbound"
+    home_region: "kalveth_esthrel"
+    primary_elements: ["Storm", "Metal"]
+    secondary_elements: ["Void", "Arcane"]
+    role_archetypes: ["skirmisher", "control"]
+
+  lightrisen:
+    name: "Lightrisen"
+    home_region: "veluns_reach"
+    primary_elements: ["Light", "Fire"]
+    secondary_elements: ["Arcane", "Nature"]
+    role_archetypes: ["support", "burst"]
+
+  shadowrune:
+    name: "Shadowrune"
+    home_region: "wraithmarsh"
+    primary_elements: ["Void", "Nature"]
+    secondary_elements: ["Ice", "Storm"]
+    role_archetypes: ["assassin", "debuffer"]
+
+  forgeheart:
+    name: "Forgeheart"
+    home_region: "emberfall_range"
+    primary_elements: ["Metal", "Fire"]
+    secondary_elements: ["Nature", "Light"]
+    role_archetypes: ["tank", "bruiser"]
+
+  greenward:
+    name: "Greenward"
+    home_region: "sylvenveil_expanse"
+    primary_elements: ["Nature", "Light"]
+    secondary_elements: ["Arcane", "Ice"]
+    role_archetypes: ["controller", "summoner"]
+
+  frostwaken:
+    name: "Frostwaken"
+    home_region: "frostspire_meridian"
+    primary_elements: ["Ice", "Arcane"]
+    secondary_elements: ["Storm", "Void"]
+    role_archetypes: ["control", "burst"]
+
+  gloambound:
+    name: "Gloambound"
+    home_region: "gloamscale_deeps"
+    primary_elements: ["Void", "Metal"]
+    secondary_elements: ["Astral", "Arcane"]
+    role_archetypes: ["hybrid", "utility"]
+
+  starcaller:
+    name: "Starcaller"
+    home_region: "astral_fracture"
+    primary_elements: ["Astral", "Arcane"]
+    secondary_elements: ["Light", "Void"]
+    role_archetypes: ["endgame", "mythic_specialist"]
+
+elements:
+  Fire:
+    type: "element"
+    color_hint: "ember_gold"
+  Ice:
+    type: "element"
+    color_hint: "glacial_blue"
+  Nature:
+    type: "element"
+    color_hint: "verdant_green"
+  Light:
+    type: "element"
+    color_hint: "radiant_white"
+  Void:
+    type: "element"
+    color_hint: "abyssal_violet"
+  Metal:
+    type: "element"
+    color_hint: "steel_gray"
+  Arcane:
+    type: "element"
+    color_hint: "runic_purple"
+  Astral:
+    type: "element"
+    color_hint: "cosmic_teal"
+  Storm:
+    type: "element"
+    color_hint: "electric_cyan"
+
+tone_paths:
+  path_of_exile:
+    label: "Path of Exile"
+    summary: "Prefers strange orders, wanders off the intended track, progresses systems unevenly."
+  path_of_hoards:
+    label: "Path of Hoards"
+    summary: "Collects relentlessly, rarely spends, tends toward overflowing inventories and unspent rewards."
+  path_of_trials:
+    label: "Path of Trials"
+    summary: "Seeks difficulty spikes, pushes into content above current power, pursues challenge first."
+  path_of_safety:
+    label: "Path of Safety"
+    summary: "Plays conservatively, banks resources, hesitates to risk rare items or currencies."
+  path_of_swiftness:
+    label: "Path of Swiftness"
+    summary: "Rushes progression, skips optional content, optimizes for speed and immediate gain."
+  path_of_depth:
+    label: "Path of Depth"
+    summary: "Explores thoroughly, revisits areas, tests systems exhaustively before moving on."
+  path_of_bargains:
+    label: "Path of Bargains"
+    summary: "Treats everything as trade value, focuses on exchanges, rerolls, and optimization of yields."
+  path_of_flux:
+    label: "Path of Flux"
+    summary: "Shifts styles often, experiments with builds, alternates between extremes of risk and safety."
+
+world_events:
+  blight_event:
+    id: "blight_event"
+    label: "Blight Event"
+    triggers:
+      - "prism_used_to_zero_charges"
+      - "prism_greed_attempt_second_prism"
+    flags:
+      locks_fast_travel: true
+      forced_instance: true
+      persists_until_cleared: true
+
+prism:
+  aevums_prism:
+    id: "aevums_prism"
+    rarity: "Divine"
+    visible_in_index_before_owned: false
+    max_charges: 5
+    requires_mythic_essence_for_recharge: true
+    recharge_cost_per_charge_hint: 10
+    notes:
+      - "Soulbound; cannot be traded."
+      - "Interacts with Blight event when abused."
+
+guide:
+  id: "the_guide"
+  visibility:
+    appears_before_blight: false
+    requires_blight_experience: true
+  paths_to_encounter:
+    - "universal"
+    - "victory"
+    - "loss"
+  notes:
+    - "Dialogue and analysis logic are out of scope for this file."
+
+catalog_rules:
+  sharenbaal_unlock_level:
+    min_player_level: 5
+  chapter_visibility:
+    default_state: "present_but_blank"
+    prism_chapter_before_ownership: "obscured_and_vague"
+  behavior_flags:
+    allow_partial_reveals: true
+    requires_player_discovery_for_details: true
+    is_persistent_across_characters: true

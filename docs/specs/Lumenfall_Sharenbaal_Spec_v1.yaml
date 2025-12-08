@@ -1,0 +1,324 @@
+name: Lumenfall_Sharenbaal_Spec_v1
+version: 1
+type: subsystem_spec
+owner: Neotus
+status: draft_canon
+last_updated: 2025-12-07
+
+summary:
+  description: >
+    The Sharenbaal is an in-world artifact that acts as Lumenfall's living codex,
+    personal progression mirror, and late-game philosophical axis. When opened,
+    the world folds into a self-contained domain ("page") that reflects unlocked
+    knowledge and the player's behavioral patterns. It cannot be opened in danger
+    states and evolves over time based on what the player does.
+  purpose:
+    - Provide a diegetic UI for lore, systems, and player-identity feedback.
+    - Serve as the structural spine for late-game philosophy and The Guide.
+    - Log and reflect player behavior in a way that feels eerie but non-judgmental.
+
+lifecycle:
+  acquisition:
+    when: player_level >= 5
+    how: >
+      Automatically appears in the player's inventory with no announcement when
+      the player reaches level 5 for the first time.
+    notes:
+      - No quest, no UI popup. It simply "is suddenly there".
+      - First equip/use can be tutorialized gently via flavor, not hard UI.
+  equipping:
+    slot: offhand_or_special
+    visual: >
+      When equipped, the book hovers eerily above the player's hands, faintly
+      glowing even when closed.
+  usage_blockers:
+    - in_combat
+    - in_hazard_zone   # storms, environmental damage, active traps, etc.
+    - in_critical_story_lock          # e.g. forced cutscenes, blight gauntlet
+  usage_blocker_behavior:
+    attempt_open_while_blocked:
+      effect:
+        - play_dim_feedback: true
+        - duration_seconds: 0.2
+        - description: >
+            The book briefly darkens and refuses to open, hinting that it is
+            "still recording" what is happening.
+      rules:
+        - no_open_animation
+        - no_scene_transition
+    exit_due_to_emergency:
+      trigger:
+        - damage_event_while_inside
+        - hazard_trigger_while_inside
+        - forced_story_state_change
+      behavior:
+        - immediately_play_exit_sequence: true
+        - return_player_to_world_position: true
+        - mark_session_as_interrupted: true
+
+structure:
+  concept:
+    - The Sharenbaal is structured as chapters and pages.
+    - Each page is a self-contained domain the player can walk around in.
+    - All chapters and pages exist from the start, but their contents are hidden
+      until the player unlocks relevant knowledge in the world.
+  hierarchy:
+    chapters:
+      - id: elements
+        name: "Elements"
+        description: >
+          Domain of elemental pillars, each representing one discovered element.
+        page_type: domain
+      - id: regions
+        name: "Regions"
+        description: >
+          Domain that shows discovered regions, their esthrel, and key traits.
+        page_type: domain
+      - id: classes
+        name: "Classes"
+        description: >
+          Domain that reflects class, subclass, and elemental alignment data.
+        page_type: domain
+      - id: prisms
+        name: "Prisms & Relics"
+        description: >
+          Domain of altars and broken light structures; Aevum's Prism remains
+          extremely vague until obtained.
+        page_type: domain
+      - id: paths
+        name: "Player Paths"
+        description: >
+          Domain that encodes the 8 broad behavioral paths as visual motifs and
+          subtle text, not direct explanations.
+        page_type: domain
+      - id: history
+        name: "History & Lore"
+        description: >
+          Cathedral library-like domain for major world events, factions, and
+          discovered story arcs.
+        page_type: domain
+      - id: systems
+        name: "Systems & Rarities"
+        description: >
+          Domain showing mechanical systems (currencies, rarities, essences) as
+          in-world structures rather than menus.
+        page_type: domain
+      - id: guide
+        name: "Echoes of the Guide"
+        description: >
+          Chapter that remains mostly abstract until after the Blight event.
+          Contains only hints and fragments beforehand.
+        page_type: domain
+
+pages:
+  # Pages are logical; each maps to a 3D/2D domain layout and a movement bounds.
+  general_rules:
+    always_available: true      # Chapters/pages exist from level 5 onwards.
+    content_unlocks:
+      description: >
+        Each page's content is revealed when the player encounters related
+        items, elements, regions, or events in the world. The page itself is
+        always accessible; only its structures/text start hidden.
+      mechanics:
+        - For each tracked thing (element, card, region, boss, etc.), the page
+          has a "visible" flag per object.
+        - On world discovery, set visible=true for associated structures.
+        - Unknown content remains completely absent, not grayed-out.
+    initial_page_on_open:
+      first_session: elements
+      subsequent_sessions_same_runtime: last_open_page
+      subsequent_sessions_new_runtime: elements
+  movement_bounds:
+    model: per_page_custom_box
+    description: >
+      Each page defines a custom, axis-aligned bounding box that determines how
+      far the player can walk inside the domain. It always:
+        - Extends slightly beyond functional structures.
+        - Stays well away from the literal page edges.
+        - Uses decorative geometry near bounds to create illusion of greater space.
+    rules:
+      - Player cannot bypass bounds via jump/dash/teleport.
+      - Bounds are defined per page in data, not hard-coded.
+  instance_behavior:
+    per_player_instance: true
+    multiplayer_projection:
+      description: >
+        When a player is inside the Sharenbaal, other players see their original
+        body frozen in the world, standing with the open book and a faint
+        purple/speckled circle under their feet (similar to an end-portal aura).
+      rules:
+        - No enemies or hazards target the projected body.
+        - The projected body receives no damage.
+        - For the owner, gameplay occurs inside the Sharenbaal domain only.
+
+open_close_flow:
+  open_conditions:
+    allowed_if:
+      - not in_combat
+      - not in_hazard_zone
+      - not in_critical_story_lock
+    action:
+      input: keybind_or_interact
+      sequence:
+        - freeze_world_for_owner_only: true
+        - spawn_book_visual_in_front_of_player: true
+        - trigger_page_fold_in_animation: true
+        - transition_camera_to_page_domain: true
+  close_conditions:
+    manual_close:
+      description: >
+        Player chooses to close the Sharenbaal via keybind or interacting with
+        a closing prompt inside the domain.
+      sequence:
+        - trigger_page_fold_out_animation: true
+        - despawn_domain_structures_after_animation: true
+        - return_camera_to_world: true
+        - return_player_to_original_world_position: true
+    forced_close:
+      description: >
+        Emergency exit when combat/hazard/story events trigger while inside.
+      sequence:
+        - interrupt_page_animation_if_running: true
+        - instantly_collapse_domain_visuals: true
+        - return_player_to_world_position: true
+        - apply_short_cooldown_before_reopen: true
+
+animations_and_fx:
+  page_turn:
+    duration_seconds: 2.0
+    visual:
+      description: >
+        The current domain shrinks/collapses like a folding page in a pop-up
+        book, while the next domain grows/expands into place in sync with a
+        cosmic page-turn motion.
+      direction: fixed_north_fold
+      player_collision_rules:
+        - Domains (page surfaces) have no collision.
+        - Functional structures temporarily disable collision during the fold.
+        - The page effect can visually pass "through" the player model.
+  open_feedback:
+    outside_world:
+      aura_under_feet:
+        color: deep_purple
+        style: starfield_speckle
+        purpose: indicate the player is "mentally elsewhere".
+    inside_domain:
+      ambience: book_garden
+      lighting: soft_cosmic
+  combat_lockout_feedback:
+    dim_effect:
+      duration_seconds: 0.2
+      style: uniform_rgb_darken
+      trigger: attempt_open_while_blocked
+    unlock_effect:
+      duration_seconds: 0.2
+      style: reverse_darken_with_soft_flash
+      trigger: leaving_combat_or_hazard
+
+progression_recorder:
+  mode: full_behavioral_recorder
+  description: >
+    The Sharenbaal tracks not only what you have seen, but *how* you play. It
+    logs tendencies, preferences, avoidance patterns, and interaction habits.
+    This data is later used by The Guide and by the Player Paths chapter.
+  tracked_axes_examples:
+    - combat_vs_collection_bias
+    - ARPG_vs_TCG_progression_order
+    - hoarding_vs_spending_behavior
+    - risk_tolerance_in_high_stakes_events
+    - tendency_to_help_others_vs_solo_play
+    - reaction_to_loss   # quit, grind, avoidance, etc.
+  storage:
+    per_player_persistent: true
+    implementation_hint: >
+      Store as a structured profile (e.g. JSON) with counters/weights that can
+      be safely extended in future patches.
+  sharenbaal_usage_effects:
+    - The Player Paths chapter uses these weights to choose one of 8 broad
+      path labels and visual motifs.
+    - The Guide uses these weights to generate eerily accurate reflections of
+      the player's behavior after the Blight event.
+    - Some pages alter their ambient text or minor structures based on trends
+      (never in a way that breaks quests).
+
+content_unlock_rules:
+  general:
+    - Chapters/pages are always present from level 5 onwards.
+    - Content unlocks when the player encounters relevant entities.
+  examples:
+    elements:
+      unlock_condition: encounter_element_in_world_or_card
+      effect:
+        - spawn_or_reveal_element_pillar
+    regions:
+      unlock_condition: enter_region_for_first_time
+      effect:
+        - reveal_region_obelisk
+    prisms:
+      unlock_condition:
+        - early_hint_structures_visible_from_start
+        - Aevum_prism_details_remain_vague_until_owned: true
+    guide_chapter:
+      pre_blight:
+        - show_only_fragmented_text
+        - no_direct_instructions
+      post_blight:
+        - additional_entries_unlocked_as_player_progresses_guide_journey: true
+
+persistence:
+  runtime_session:
+    reopen_behavior:
+      - Reopening Sharenbaal in the same game session returns to the last
+        opened page and chapter.
+  cold_start:
+    reopen_behavior:
+      - After restarting the game, the Sharenbaal always opens to the initial
+        default (page 1, chapter 1, currently Elements).
+  data:
+    saved_fields:
+      - last_open_chapter
+      - last_open_page
+      - discovered_content_flags
+      - progression_recorder_profile
+      - guide_journey_flags
+
+engine_integration:
+  implementation_notes:
+    - Treat Sharenbaal as a special scene overlay, not a separate game mode.
+    - Keep domain layouts modular (per-page prefabs with their own movement box).
+    - Drive visibility via data flags, not code branches.
+    - Ensure transition animations do not block the main loop; they should be
+      state-driven and cancellable for emergency exits.
+  hooks:
+    on_world_event:
+      - update_discovery_flags
+      - update_progression_profile
+    on_sharenbaal_open:
+      - snapshot_player_position_and_state
+      - freeze_world_for_owner_only
+    on_sharenbaal_close:
+      - restore_player_position_and_state
+      - unfreeze_world_for_owner
+    on_combat_or_hazard_start:
+      - set_sharenbaal_blocked_flag: true
+    on_combat_or_hazard_end:
+      - clear_sharenbaal_blocked_flag: true
+
+constraints:
+  performance:
+    - Sharenbaal pages should be lightweight; avoid spawning full world copies.
+    - Decorative structures can be baked/instanced to reduce cost.
+  networking:
+    - Only the owner transitions to the domain.
+    - Other players see a projected idle body with aura.
+    - No combat, loot, or progression occurs for others while someone is inside.
+  extensibility:
+    - New chapters and pages should be addable by data only.
+    - New tracked behaviors should extend the progression profile schema without
+      breaking existing saves.
+
+todo_future_expansion:
+  - Define the exact 8 Player Paths and their visual motifs.
+  - Specify the exact data schema for the progression_recorder profile.
+  - Add chapter-specific interactions (e.g., tapping pillars to read deeper lore).
+  - Integrate with late-game Guide journey scripting.

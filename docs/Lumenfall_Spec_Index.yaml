@@ -1,0 +1,124 @@
+spec_index:
+  version: 8
+  description: >
+    Central reference map for all project specifications.
+    This index lists every governance document, subsystem spec,
+    UI/UX resource, lore-context file, Castle system file,
+    and Triad coordination document currently active.
+
+specs:
+
+  # -------------------------------------------------------
+  # GOVERNANCE (PROJECT META)
+  # -------------------------------------------------------
+  - id: workflow_pipeline
+    name: "Workflow Pipeline"
+    path: docs/Lumenfall_Workflow_Pipeline.md
+    version: 2
+
+  - id: thread_survival_protocol
+    name: "Thread Survival Protocol"
+    path: docs/Lumenfall_Thread_Survival_Protocol.md
+    version: 2
+
+  - id: onboarding_guide
+    name: "Onboarding Guide"
+    path: docs/Lumenfall_Onboarding.md
+    version: 2
+
+  - id: kepler_ruleset
+    name: "Kepler Ruleset"
+    path: docs/specs/Kepler_Ruleset.yaml
+    version: 1
+
+
+  # -------------------------------------------------------
+  # CORE SUBSYSTEMS (GAME MECHANICS)
+  # -------------------------------------------------------
+  - id: cards
+    name: "Card System Specification"
+    path: docs/specs/Card_System.yaml
+    version: 1
+    status: draft
+
+  - id: packs
+    name: "Pack Generation & Rarity Framework"
+    path: docs/specs/Packs_System.yaml
+    version: 1
+    status: draft
+
+  - id: arpg
+    name: "ARPG Combat & Region Interaction Spec"
+    path: docs/specs/ARPG_Combat_System.yaml
+    version: 0
+    status: placeholder
+
+  - id: regions
+    name: "Region System Spec"
+    path: docs/specs/Region_System.yaml
+    version: 0
+    status: placeholder
+
+  - id: sharenbaal
+    name: "Sharenbaal System Spec"
+    path: docs/specs/Sharenbaal_System.yaml
+    version: 0
+    status: placeholder
+
+
+  # -------------------------------------------------------
+  # UI / UX
+  # -------------------------------------------------------
+  - id: ui_ux_core
+    name: "UI/UX Core Framework"
+    path: docs/specs/UI_UX_Core.yaml
+    version: 1
+    status: active
+    description: "Core UI/UX system, modular structure and growth rules."
+
+  - id: ui_component_tree
+    name: "UI Component Tree (Option B)"
+    path: docs/specs/UI_Component_Tree.yaml
+    version: 1
+    status: active
+    description: "Modular screen/component routing map for Kepler."
+
+  - id: ui_guidelines
+    name: "UI Framework"
+    path: docs/ui/Lumenfall_UI_Guidelines.md
+    version: 0
+    status: placeholder
+
+  - id: ux_rules
+    name: "UX Interaction Rules"
+    path: docs/ui/Lumenfall_UX_Rules.md
+    version: 0
+    status: placeholder
+
+
+  # -------------------------------------------------------
+  # CASTLE SYSTEM
+  # -------------------------------------------------------
+  - id: castle_system
+    name: "Castle System Specification"
+    path: docs/specs/Castle_System.yaml
+    version: 0
+    status: placeholder
+
+
+  # -------------------------------------------------------
+  # TRIAD COORDINATION
+  # -------------------------------------------------------
+  - id: triad
+    name: "Triad Coordination Protocol"
+    path: docs/Lumenfall_Triad_Protocol.md
+    version: 1
+    status: active
+
+conventions:
+  mechanics_files: "YAML only"
+  lore_context: "Markdown"
+  versioning: "Semantic (major.minor.patch)"
+  notes: >
+    Placeholder files exist but not all are implemented.
+    Status field indicates readiness: draft / placeholder / active.
