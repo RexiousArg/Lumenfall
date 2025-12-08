@@ -1,0 +1,220 @@
+# ============================================================
+# Lumenfall UI Component Tree — v1.0 (Option B Spec)
+# Scope: Core prototype + near-future systems
+# Purpose:
+#   - Provide Kepler a modular UI layout map.
+#   - Define components, responsibilities, and routing.
+#   - Allow expansion (Sharenbaal, Castle, ARPG HUD) without rewrites.
+#   - Keep placeholders light and prunable.
+# ============================================================
+
+ui_system:
+  version: 1.0
+  growth_rules:
+    - "UI may expand horizontally (new screens) or vertically (new components) without restructuring existing code."
+    - "Placeholders are allowed but pruned when they exceed 3 unused future features."
+    - "Every module must be self-contained and expose a render(), update(), and handle_input() interface."
+    - "Visual state must never dictate game logic (UI → State, not State → UI)."
+
+# ------------------------------------------------------------
+# 1. GLOBAL LAYOUT
+# ------------------------------------------------------------
+global_layout:
+  window:
+    logical_resolution: "800x600"
+    scalable: true
+    fullscreen_toggle: "F11"
+  regions:
+    top_bar: true
+    main_content_area: true
+    modal_layer: true
+    toast_layer: true
+  routing:
+    default_screen: "packs_screen"
+    registered_screens:
+      - packs_screen
+      - collection_screen
+      - arpg_screen
+      - settings_screen
+      - sharenbaal_modal
+      - placeholder_castle_screen
+
+# ------------------------------------------------------------
+# 2. COMPONENT REGISTRY
+# ------------------------------------------------------------
+ui_components:
+  top_bar:
+    type: "persistent"
+    modules:
+      - currency_display
+      - equip_bar
+      - nav_tabs
+
+  currency_display:
+    fields:
+      - vel_amount
+      - erun_amount
+      - zeth_amount
+      - velarun_amount
+    updates_from: "player_state.currency"
+
+  equip_bar:
+    slots: 3
+    rarity_constraints: "Common → Mythic"
+    interactions:
+      left_click: "select_equip"
+      right_click: "unequip"
+
+  nav_tabs:
+    tabs:
+      - Packs
+      - Collection
+      - Arena
+      - Settings
+    behavior: "switch active_screen"
+
+# ------------------------------------------------------------
+# 3. SCREENS
+# ------------------------------------------------------------
+screens:
+  packs_screen:
+    components:
+      - pack_history_panel
+      - pack_display
+      - open_pack_button
+    interactions:
+      - "open 5-card pack"
+      - "show rarity reveal animation"
+
+  collection_screen:
+    components:
+      - card_grid
+      - rarity_filter
+      - sort_toggle
+      - card_tooltip
+    interactions:
+      - "lock/unlock card"
+      - "exchange card for essence"
+      - "scrollable virtualized grid"
+    secrets:
+      philosophy: "??? entries until owned (Secret/Astral/Divine hidden)"
+
+  arpg_screen:
+    components:
+      - player_health_bar
+      - enemy_health_bar
+      - exp_orb_indicator
+      - arena_timer
+    placeholders:
+      - resource_overlay (future ARPG mana/energy model)
+    interactions:
+      combat_hooks: "kepler_stubbed_logic"
+
+  settings_screen:
+    components:
+      - volume_slider
+      - graphics_toggle
+      - keybind_editor (placeholder)
+
+# ------------------------------------------------------------
+# 4. MODALS
+# ------------------------------------------------------------
+modals:
+  sharenbaal_modal:
+    state: "closed_by_default"
+    components:
+      - chapter_tabs
+      - page_content_panel
+      - page_turn_button
+      - locked_page_overlay
+    behaviors:
+      - "force_close on hazard"
+      - "dim_world_on_open"
+      - "blocked_in_castle_events"
+    placeholders:
+      - castle_chapter
+      - region_attunement_chapter
+
+  generic_modal:
+    use_cases:
+      - confirmation_dialog
+      - forge_preview (future)
+      - castle_badge_exchange (future)
+
+# ------------------------------------------------------------
+# 5. TOASTS / NOTIFICATIONS
+# ------------------------------------------------------------
+toast_system:
+  types:
+    - info
+    - warning
+    - rare_pull
+    - mythic_pull
+  behavior:
+    duration: "1.8s"
+    edge: "top_right"
+    queue_limit: 4
+
+# ------------------------------------------------------------
+# 6. UI STYLE LAYER (THEME)
+# ------------------------------------------------------------
+style:
+  palettes:
+    light:
+      background: "#1f1f1f"
+      accent: "#d085ff"
+      rarity_colors:
+        common: "#c8c8c8"
+        uncommon: "#75ffb4"
+        rare: "#559cff"
+        epic: "#b27cff"
+        legendary: "#ffbf47"
+        mythic: "#ff7bea"
+        secret: "#00ffff"
+        astral: "#ffaaff"
+        divine: "#fff2b3"
+    dark:
+      background: "#0e0e0e"
+      accent: "#a64aff"
+  animations:
+    reveal_pulse: "scale+opacity 0.5s"
+    modal_fade: "fade_in 0.25s"
+
+# ------------------------------------------------------------
+# 7. PLACEHOLDER ZONES (Option B)
+# ------------------------------------------------------------
+placeholders:
+  sharenbaal_expansion:
+    allowed: true
+    limit: "≤3 before pruning"
+    notes:
+      - "Will need Elemental Page UI"
+      - "Will need Attunement Page UI"
+      - "Will need Castle Chapter UI"
+
+  castle_expansion:
+    allowed: true
+    limit: "≤3 before pruning"
+    notes:
+      - "Badge Shrine UI"
+      - "Forge UI"
+      - "Castle Pack Opening UI"
+
+  arpg_expansion:
+    allowed: true
+    limit: "≤3 before pruning"
+    notes:
+      - "Ability hotbar"
+      - "Targeting reticle"
+      - "Buff/debuff tracker"
+
+# ------------------------------------------------------------
+# 8. IMPLEMENTATION NOTES FOR KEPLER
+# ------------------------------------------------------------
+implementation_notes:
+  - "Each component must live in ui/components/ and expose render(), update(), and handle_input()."
+  - "Screens assemble components but never contain logic."
+  - "Modals overlay; they do not replace screens."
+  - "Top bar is persistent; do NOT redraw screen-wide each frame."
+  - "Keep UI stateless; read from game state."
+  - "Future expansions plug into the component registry without rewriting existing screens."

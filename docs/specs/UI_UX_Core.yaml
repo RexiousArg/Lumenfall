@@ -1,0 +1,103 @@
+version: 1
+spec_type: "ui_ux_core"
+description: >
+  Canonical UI/UX structural rules for Lumenfall.
+  Defines the extensible screen framework, modular UI components,
+  growth model, and placeholder pruning rules.
+
+ui_framework:
+  philosophy:
+    - "UI is modular, screen-based, and grows without rewrites."
+    - "UI/UX evolves alongside features; no final layout exists."
+    - "Every screen has its own module, components, and layout logic."
+    - "Kepler implements by composing components from ui_components/."
+
+  screens:
+    pack_opener:
+      file: "aevum_prism/ui/screens/pack_opener.py"
+      description: "Modular pack-opening screen; uses history panel, reveal controller, and rarity flare components."
+      components:
+        - history_panel
+        - rarity_flare
+        - card_reveal_sequence
+
+    arena:
+      file: "aevum_prism/ui/screens/arena.py"
+      description: "ARPG combat loop screen; uses HUD components for HP, enemy markers, XP, drops, etc."
+      components:
+        - hud_bar
+        - enemy_indicator
+        - arena_overlay
+
+    collection:
+      file: "aevum_prism/ui/screens/collection.py"
+      description: "Grid-based card browser with modal handling for item interactions."
+      components:
+        - card_grid
+        - rarity_filters
+        - tooltip_modal
+
+    equips:
+      file: "aevum_prism/ui/screens/equips.py"
+      description: "3-slot equip UI; browses player-owned cards and assigns them."
+      components:
+        - equip_slots
+        - equip_selector_modal
+
+    future_screens:
+      - "castle"
+      - "classes"
+      - "world_map"
+      - "forge"
+      - "guide_chamber"
+      - "sharenbaal_pages"
+      placeholder: true
+
+ui_components:
+  directory: "aevum_prism/ui/ui_components/"
+  modules:
+    - history_panel
+    - rarity_flare
+    - card_reveal_sequence
+    - hud_bar
+    - enemy_indicator
+    - arena_overlay
+    - card_grid
+    - rarity_filters
+    - tooltip_modal
+    - equip_slots
+    - equip_selector_modal
+
+  placeholder_rules:
+    new_component_trigger:
+      - "When a new feature requires UI functions not served by existing modules."
+      - "When a screen needs reusable logic or rendering behavior."
+    max_placeholder_components: 5
+    note: "Placeholders prevent rigidity, but cannot accumulate unchecked."
+
+growth_rules:
+  - "Any screen may be expanded by adding new UI component modules."
+  - "Screen files may grow, split, or modularize further."
+  - "Kepler should never hardcode UI into game logic—always use components."
+  - "Atlas logs expansions and maintains UI directory structure."
+
+placeholder_pruning:
+  conditions:
+    excessive_density: >
+      "If any UI module accumulates more than 5 placeholders, Atlas must prune or consolidate."
+    stagnant_placeholders: >
+      "If a placeholder survives past introduction of 3 major features that relate to it, it must be removed or rewritten."
+
+  pruning_process:
+    - "Atlas prunes placeholders that exceed density rules or remain after 3 major updates."
+    - "Kepler updates any cross-references."
+    - "Neotus verifies whether pruned features require a new slot."
+
+  guarantee:
+    - "Pruning removes noise but preserves the extensible UI model."
+    - "Framework remains modular, stable, and expandable."
+
+notes:
+  - "This spec is intentionally flexible; it represents structure, not layout."
+  - "We will create layout mocks later once combat UI matures."
+  - "All components must be pure-PyGame modules and reusable across screens."
